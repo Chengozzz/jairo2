@@ -9,8 +9,7 @@
                 @foreach($posts as $post)
                     <li>
                         <h2>{{ $post->titulo }}</h2>
-                        <p>{{ $post->descripcion }}</p>
-                        <p><strong>Contenido:</strong> {{ $post->contenido }}</p>
+                        <p><strong>Contenido:</strong> {{ $post->descripcion }}</p>
                         <p><strong>Creado:</strong> {{ $post->created_at->format('d-m-Y H:i') }}</p>
                     </li>
                 @endforeach

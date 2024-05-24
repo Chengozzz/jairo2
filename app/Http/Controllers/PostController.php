@@ -16,7 +16,9 @@ class PostController extends Controller
     public function index()
     {
         //
-        return view('post.index');
+        $posts = Post::all(); // Recupera todos los posts de la base de datos
+        return view('post.index', compact('posts')); // Pasa los posts a la vista
+        //return view('post.index');
 
     }
 
@@ -34,11 +36,33 @@ class PostController extends Controller
      */
     public function store(StorepostRequest $request)
     {
-        //
-        $post = post::make($request->validated());
-        $post->user_id = auth()->user()->id;
+        // Validar los datos
+        $validatedData = $request->validate([
+            'titulo' => 'required|max:255',
+            'descripcion' => 'required',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Crear un nuevo post
+        $post = new Post();
+        $post->titulo = $validatedData['titulo'];
+        $post->descripcion = $validatedData['descripcion'];
+        $post->user_id = auth()->user()->id; // Asume que estás usando autenticación y el usuario está autenticado
+
+        // Manejar la imagen subida si existe
+        if ($request->hasFile('file')) {
+            $imagePath = $request->file('file')->store('images', 'public');
+            $post->image_path = $imagePath;
+        }
+
         $post->save();
-        
+
+        return redirect()->route('post/index')->with('success', 'Post creado exitosamente.');
+        //
+        // $post = post::make($request->validated());
+        // $post->user_id = auth()->user()->id;
+        // $post->save();
+
        // return redirect()->route('dasboard')->with('success', 'Tarea creada exitosamente.');
 
     }
