@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\comentario;
 use App\Http\Requests\StorecomentarioRequest;
 use App\Http\Requests\UpdatecomentarioRequest;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class ComentarioController extends Controller
 {
@@ -29,7 +31,22 @@ class ComentarioController extends Controller
      */
     public function store(StorecomentarioRequest $request)
     {
-        //
+        //No tocar aun no jala!
+         // Validar los datos del formulario
+         $request->validate([
+            'post_id' => 'required|exists:posts,id',
+            'descripcion' => 'required|string|max:255',
+        ]);
+
+        // Crear un nuevo comentario
+        $comentario = new Comentario();
+        $comentario->post_id = $request->post_id;
+        $comentario->user_id = Auth::id(); // Asignar el ID del usuario autenticado
+        $comentario->descripcion = $request->descripcion;
+        $comentario->save();
+        
+        // Redirigir de nuevo a la misma página
+        return redirect()->back()->with('success', 'Comentario creado exitosamente.');
     }
 
     /**

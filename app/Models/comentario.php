@@ -16,7 +16,7 @@ class comentario extends Model
         return $this->belongsTo(Post::class);
     }
     public function user(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function parent(){
         return $this->belongTo(comentario::class, 'parent_id');

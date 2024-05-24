@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ComentarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,5 +31,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/post/delete/{id}', [PostController::class, 'delete'])->name('post/delete');
     
     });
+    Route::middleware(['auth'])->group(function () {
     
+        Route::get('/comentario', [ComentarioController::class, 'index'])->name('comentario/index');
+        Route::get('/comentario/create', [ComentarioController::class, 'create'])->name('comentario/create');
+        Route::post('/comentario/store', [ComentarioController::class, 'store'])->name('comentario/store');
+        Route::get('/comentario/edit', [ComentarioController::class, 'edit'])->name('comentario/edit');
+        Route::put('/comentario/edit/{id}', [ComentarioController::class, 'update'])->name('comentario/update');
+        Route::get('/comentario/delete/{id}', [ComentarioController::class, 'delete'])->name('comentario/delete');
+    
+    });
 require __DIR__.'/auth.php';
